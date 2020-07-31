@@ -1,0 +1,199 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.swiggy.pos.service.grpc.v1;
+
+message TrackServiceResponseV3 {
+    int64 statusCode = 1;
+    string statusMessage = 2;
+    TrackOrderV3 data = 3;
+}
+
+message TrackOrderV3 {
+    OrderDetails order_details = 1;
+    CustomerDetails customer = 2;
+    OutletDetails outlet_details = 3;
+    DeliveryDetails delivery_details = 4;
+    OrderStatus order_status = 5;
+    ETA eta = 6;
+    repeated Messages messages = 7;
+    Configurations configuration = 8;
+    repeated NextBasedAction next_based_actions = 9;
+    repeated Counter counters = 10;
+    RatingData rating_data = 11;
+}
+
+message RatingData {
+    string card_message = 1;
+    string delivery_time = 2;
+    string order_status = 3;
+    string rate_delivery = 4;
+}
+
+message Counter {
+    CounterType type = 1;
+    Buffer buffer = 2;
+}
+
+message Buffer {
+    TimeRemaining time_remaining = 1;
+    BufferType type = 2;
+    bool show_text = 3;
+    TimeRemainingType initial_counter_value = 4;
+}
+
+enum BufferType {
+    TIME_WINDOW = 0;
+    EXPLICIT = 1;
+}
+
+message TimeRemaining {
+    int64 value = 1;
+    TimeRemainingType type = 2;
+}
+
+enum TimeRemainingType {
+    SECONDS = 0;
+    MINUTES = 1;
+    HOUR = 2;
+}
+
+enum CounterType {
+    PRE_CANCELLATION = 0;
+    PRE_CANCELLATION_CONFIRMATION = 1;
+}
+
+message NextBasedAction {
+    string type = 1;
+    string title = 2;
+    string description = 3;
+    bool ask_confirmation = 4;
+    string icon = 5;
+    repeated Button buttons = 6;
+    bool is_blocking = 7;
+    map<string, string> metadata = 8;
+}
+
+message Button {
+    bool is_enabled = 1;
+    ActionType action = 2;
+    string text = 3;
+    map<string, string> css_properties = 4;
+    ButtonType type = 5;
+}
+
+enum ButtonType {
+    CLICKABLE_TEXT = 0;
+    BUTTON = 1;
+}
+
+enum ActionType {
+    DISMISS_CANCEL_ORDER = 0;
+    CANCEL_ORDER = 1;
+    CANCEL_POPUP = 2;
+    SIMILAR_OPTIONS = 3;
+    GO_TO_HOME = 4;
+    CALL_RESTAURANT = 5;
+    EDIT_ORDER = 6;
+}
+
+message Configurations {
+    bool is_de_trackable = 1;
+    bool show_map = 2;
+    string map_image_id = 3;
+    bool show_de_path = 4;
+    PollingIntervals polling = 5;
+    bool show_rating_data = 6;
+    RatingMode rating_mode = 7;
+}
+
+enum RatingMode {
+    CONTACTLESS_DELIVERY = 0;
+    REGULAR = 1;
+}
+
+message PollingIntervals {
+    int64 track_order = 1;
+    int64 track_de = 2;
+}
+
+message Messages {
+    string type = 1;
+    string title = 2;
+    string description = 3;
+    string icon = 4;
+    int64 priority = 5;
+}
+
+message ETA {
+    string title = 1;
+    string eta_text = 2;
+    int64 eta = 3;
+}
+
+message OrderStatus {
+    string order_state = 1;
+    string icon = 2;
+    string hidden_state = 3;
+}
+
+message DeliveryDetails {
+    Location location = 1;
+    Annotation annotation = 2;
+    string delivery_exec_contact_number = 3;
+    string delivery_exec_image_url = 4;
+    repeated BatchedDestination batched_destinations = 5;
+    string batched_order_message = 6;
+    DeliverySchedule delivery_schedule = 7;
+    string delivery_instruction = 8;
+}
+
+message DeliverySchedule {
+    int64 start_time = 1;
+    int64 end_time = 2;
+}
+
+message BatchedDestination {
+    Location location = 1;
+    string status = 2;
+}
+
+message OutletDetails {
+    Location location = 1;
+    Annotation annotation = 2;
+    string contact_number = 3;
+    string outlet_id = 4;
+    string image_url = 5;
+}
+
+message CustomerDetails {
+    Location location = 1;
+    Annotation annotation = 2;
+    Address delivery_address = 3;
+}
+
+message Location {
+    double lat = 1;
+    double lon = 2;
+}
+
+message Annotation {
+    string name = 1;
+    string url = 2;
+}
+
+message Address {
+    string address_line1 = 1;
+    string address = 2;
+    string landmark = 3;
+    string area = 4;
+    string flat_no = 5;
+    string city = 6;
+}
+
+message OrderDetails {
+    string order_id = 1;
+    string order_type = 2;
+    int64 order_total = 3;
+    int64 order_items_count = 4;
+    int64 order_time = 5;
+}
