@@ -1,199 +1,210 @@
 syntax = "proto3";
 option java_multiple_files = true;
-package com.swiggy.pos.service.grpc.v1;
-
+package swiggy.pos.service.grpc.v1;
+option go_package = "grpcv1";
+option java_package = "com.swiggy.pos.service.grpc.v1";
+option java_outer_classname = "TrackOrderProto";
+import "google/protobuf/duration.proto";
+// TrackServiceResponseV3 will be the base response.
 message TrackServiceResponseV3 {
-    int64 statusCode = 1;
-    string statusMessage = 2;
-    TrackOrderV3 data = 3;
+  int64 status_code = 1;
+  string status_message = 2;
+  TrackOrderV3 info = 3;
 }
-
+// TrackOrderV3 defined below.
 message TrackOrderV3 {
-    OrderDetails order_details = 1;
-    CustomerDetails customer = 2;
-    OutletDetails outlet_details = 3;
-    DeliveryDetails delivery_details = 4;
-    OrderStatus order_status = 5;
-    ETA eta = 6;
-    repeated Messages messages = 7;
-    Configurations configuration = 8;
-    repeated NextBasedAction next_based_actions = 9;
-    repeated Counter counters = 10;
-    RatingData rating_data = 11;
+  OrderDetails order_details = 1;
+  CustomerDetails customer = 2;
+  OutletDetails outlet_details = 3;
+  DeliveryDetails delivery_details = 4;
+  OrderStatus order_status = 5;
+  ETA eta = 6;
+  repeated Messages messages = 7;
+  Configurations configuration = 8;
+  repeated NextBasedAction next_based_actions = 9;
+  repeated Counter counters = 10;
+  RatingInfo rating_info = 11;
 }
-
-message RatingData {
-    string card_message = 1;
-    string delivery_time = 2;
-    string order_status = 3;
-    string rate_delivery = 4;
+// RatingData defined below.
+message RatingInfo {
+  string card_message = 1;
+  string delivery_time = 2;
+  string order_status = 3;
+  string rate_delivery = 4;
 }
-
+// RatingData defined below.
 message Counter {
-    CounterType type = 1;
-    Buffer buffer = 2;
+  CounterType type = 1;
+  Buffer buffer = 2;
 }
-
+// RatingData defined below.
 message Buffer {
-    TimeRemaining time_remaining = 1;
-    BufferType type = 2;
-    bool show_text = 3;
-    TimeRemainingType initial_counter_value = 4;
+  TimeRemaining time_remaining = 1;
+  BufferType type = 2;
+  bool show_text = 3;
+  TimeRemaining initial_counter_value = 4;
 }
-
+// BufferType defined below.
 enum BufferType {
-    TIME_WINDOW = 0;
-    EXPLICIT = 1;
+  BUFFER_TYPE_INVALID = 0;
+  BUFFER_TYPE_TIME_WINDOW = 1;
+  BUFFER_TYPE_EXPLICIT = 2;
 }
-
+// TimeRemaining defined below.
 message TimeRemaining {
-    int64 value = 1;
-    TimeRemainingType type = 2;
+  int64 value = 1;
+  TimeRemainingType type = 2;
 }
-
+// TimeRemainingType defined below.
 enum TimeRemainingType {
-    SECONDS = 0;
-    MINUTES = 1;
-    HOUR = 2;
+  TIME_REMAINING_TYPE_INVALID = 0;
+  TIME_REMAINING_TYPE_SECONDS = 1;
+  TIME_REMAINING_TYPE_MINUTES = 2;
+  TIME_REMAINING_TYPE_HOUR = 3;
 }
-
+// CounterType defined below.
 enum CounterType {
-    PRE_CANCELLATION = 0;
-    PRE_CANCELLATION_CONFIRMATION = 1;
+  COUNTER_TYPE_INVALID = 0;
+  COUNTER_TYPE_PRE_CANCELLATION = 1;
+  COUNTER_TYPE_PRE_CANCELLATION_CONFIRMATION = 2;
 }
-
+// NextBasedAction defined below.
 message NextBasedAction {
-    string type = 1;
-    string title = 2;
-    string description = 3;
-    bool ask_confirmation = 4;
-    string icon = 5;
-    repeated Button buttons = 6;
-    bool is_blocking = 7;
-    map<string, string> metadata = 8;
+  string type = 1;
+  string title = 2;
+  string description = 3;
+  bool ask_confirmation = 4;
+  string icon = 5;
+  repeated Button buttons = 6;
+  bool is_blocking = 7;
+  map<string, string> meta = 8;
 }
-
+// Button defined below.
 message Button {
-    bool is_enabled = 1;
-    ActionType action = 2;
-    string text = 3;
-    map<string, string> css_properties = 4;
-    ButtonType type = 5;
+  bool is_enabled = 1;
+  ActionType action = 2;
+  string text = 3;
+  map<string, string> css_properties = 4;
+  ButtonType type = 5;
 }
-
+// ButtonType defined below.
 enum ButtonType {
-    CLICKABLE_TEXT = 0;
-    BUTTON = 1;
+  BUTTON_TYPE_INVALID = 0;
+  BUTTON_TYPE_CLICKABLE_TEXT = 1;
+  BUTTON_TYPE_BUTTON = 2;
 }
-
+// ActionType defined below.
 enum ActionType {
-    DISMISS_CANCEL_ORDER = 0;
-    CANCEL_ORDER = 1;
-    CANCEL_POPUP = 2;
-    SIMILAR_OPTIONS = 3;
-    GO_TO_HOME = 4;
-    CALL_RESTAURANT = 5;
-    EDIT_ORDER = 6;
+  ACTION_TYPE_INVALID = 0;
+  ACTION_TYPE_DISMISS_CANCEL_ORDER = 7;
+  ACTION_TYPE_CANCEL_ORDER = 1;
+  ACTION_TYPE_CANCEL_POPUP = 2;
+  ACTION_TYPE_SIMILAR_OPTIONS = 3;
+  ACTION_TYPE_GO_TO_HOME = 4;
+  ACTION_TYPE_CALL_RESTAURANT = 5;
+  ACTION_TYPE_EDIT_ORDER = 6;
 }
-
+// Configurations defined below.
 message Configurations {
-    bool is_de_trackable = 1;
-    bool show_map = 2;
-    string map_image_id = 3;
-    bool show_de_path = 4;
-    PollingIntervals polling = 5;
-    bool show_rating_data = 6;
-    RatingMode rating_mode = 7;
+  bool is_de_trackable = 1;
+  bool show_map = 2;
+  string map_image_id = 3;
+  bool show_de_path = 4;
+  PollingIntervals polling = 5;
+  bool show_rating_info = 6;
+  RatingMode rating_mode = 7;
 }
-
+// RatingMode defined below.
 enum RatingMode {
-    CONTACTLESS_DELIVERY = 0;
-    REGULAR = 1;
+  RATING_MODE_INVALID = 0;
+  RATING_MODE_CONTACTLESS_DELIVERY = 1;
+  RATING_MODE_REGULAR = 2;
 }
-
+// PollingIntervals defined below.
 message PollingIntervals {
-    int64 track_order = 1;
-    int64 track_de = 2;
+  google.protobuf.Duration track_order_duration = 1;
+  google.protobuf.Duration track_de_duration = 2;
 }
-
+// Messages defined below.
 message Messages {
-    string type = 1;
-    string title = 2;
-    string description = 3;
-    string icon = 4;
-    int64 priority = 5;
+  string type = 1;
+  string title = 2;
+  string description = 3;
+  string icon = 4;
+  int64 priority = 5;
+  map<string, string> meta = 6;
 }
-
+// ETA defined below.
 message ETA {
-    string title = 1;
-    string eta_text = 2;
-    int64 eta = 3;
+  string title = 1;
+  string eta_text = 2;
+  google.protobuf.Duration eta_duration = 3;
 }
-
+// OrderStatus defined below.
 message OrderStatus {
-    string order_state = 1;
-    string icon = 2;
-    string hidden_state = 3;
+  string order_state = 1;
+  string icon = 2;
+  string hidden_state = 3;
 }
-
+// DeliveryDetails defined below.
 message DeliveryDetails {
-    Location location = 1;
-    Annotation annotation = 2;
-    string delivery_exec_contact_number = 3;
-    string delivery_exec_image_url = 4;
-    repeated BatchedDestination batched_destinations = 5;
-    string batched_order_message = 6;
-    DeliverySchedule delivery_schedule = 7;
-    string delivery_instruction = 8;
+  Location location = 1;
+  Annotation annotation = 2;
+  string delivery_exec_contact_number = 3;
+  string delivery_exec_image_url = 4;
+  repeated BatchedDestination batched_destinations = 5;
+  string batched_order_message = 6;
+  string delivery_instruction = 7;
+//  DeliverySchedule delivery_schedule = 8;
 }
-
-message DeliverySchedule {
-    int64 start_time = 1;
-    int64 end_time = 2;
-}
-
+// DeliverySchedule defined below.
+//message DeliverySchedule {
+//  int64 start_time = 1;
+//  int64 end_time = 2;
+//}
+// BatchedDestination defined below.
 message BatchedDestination {
-    Location location = 1;
-    string status = 2;
+  Location location = 1;
+  string status = 2;
 }
-
+// OutletDetails defined below.
 message OutletDetails {
-    Location location = 1;
-    Annotation annotation = 2;
-    string contact_number = 3;
-    string outlet_id = 4;
-    string image_url = 5;
+  Location location = 1;
+  Annotation annotation = 2;
+  string contact_number = 3;
+  string outlet_id = 4;
+  string image_url = 5;
 }
-
-message CustomerDetails {
-    Location location = 1;
-    Annotation annotation = 2;
-    Address delivery_address = 3;
-}
-
+// Location defined below.
 message Location {
-    double lat = 1;
-    double lon = 2;
+  double lat = 1;
+  double lon = 2;
 }
-
+// CustomerDetails defined below.
+message CustomerDetails {
+  Location location = 1;
+  Annotation annotation = 2;
+  Address delivery_address = 3;
+}
+// Annotation defined below.
 message Annotation {
-    string name = 1;
-    string url = 2;
+  string name = 1;
+  string url = 2;
 }
-
+// Address defined below.
 message Address {
-    string address_line1 = 1;
-    string address = 2;
-    string landmark = 3;
-    string area = 4;
-    string flat_no = 5;
-    string city = 6;
+  string address_line1 = 1;
+  string address = 2;
+  string landmark = 3;
+  string area = 4;
+  string flat_no = 5;
+  string city = 6;
 }
-
+// OrderDetails defined below.
 message OrderDetails {
-    string order_id = 1;
-    string order_type = 2;
-    int64 order_total = 3;
-    int64 order_items_count = 4;
-    int64 order_time = 5;
+  string order_id = 1;
+  string order_type = 2;
+  int64 order_total = 3;
+  int64 order_items_count = 4;
+  int64 order_time = 5;
 }
