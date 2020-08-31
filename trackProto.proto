@@ -1,10 +1,12 @@
 syntax = "proto3";
-option java_multiple_files = true;
 package swiggy.pos.service.grpc.v1;
+option java_multiple_files = true;
 option go_package = "grpcv1";
 option java_package = "com.swiggy.pos.service.grpc.v1";
 option java_outer_classname = "TrackOrderProto";
 import "google/protobuf/duration.proto";
+import "google/type/latlng.proto";
+import "central-address-service/v1/central_address_messages.proto";
 // TrackServiceResponseV3 will be the base response.
 message TrackServiceResponseV3 {
   int64 status_code = 1;
@@ -148,7 +150,7 @@ message OrderStatus {
 }
 // DeliveryDetails defined below.
 message DeliveryDetails {
-  Location location = 1;
+  google.type.LatLng location = 1;
   Annotation annotation = 2;
   string delivery_exec_contact_number = 3;
   string delivery_exec_image_url = 4;
@@ -164,41 +166,26 @@ message DeliveryDetails {
 //}
 // BatchedDestination defined below.
 message BatchedDestination {
-  Location location = 1;
+  google.type.LatLng location = 1;
   string status = 2;
 }
 // OutletDetails defined below.
 message OutletDetails {
-  Location location = 1;
+  google.type.LatLng location = 1;
   Annotation annotation = 2;
   string contact_number = 3;
   string outlet_id = 4;
   string image_url = 5;
 }
-// Location defined below.
-message Location {
-  double lat = 1;
-  double lon = 2;
-}
 // CustomerDetails defined below.
 message CustomerDetails {
-  Location location = 1;
-  Annotation annotation = 2;
-  Address delivery_address = 3;
+  Annotation annotation = 1;
+  swiggy.locationplatform.centraladdressservice.v1.Address delivery_address = 2;
 }
 // Annotation defined below.
 message Annotation {
   string name = 1;
   string url = 2;
-}
-// Address defined below.
-message Address {
-  string address_line1 = 1;
-  string address = 2;
-  string landmark = 3;
-  string area = 4;
-  string flat_no = 5;
-  string city = 6;
 }
 // OrderDetails defined below.
 message OrderDetails {
